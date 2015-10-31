@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;lab_gobang_AI_2/src/lab_gobang_&apos; to &apos;lab_gobang_AI_2&apos;" description="Rename resource &apos;lab_gobang_&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/lab_gobang_" name="lab_gobang_AI_2" stamp="1356072658503" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;lab_gobang_AI_2/src/lab_gobang_AI_2&apos; to &apos;lab_gobang_AI_2.c&apos;" description="Rename resource &apos;lab_gobang_AI_2&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/lab_gobang_AI_2" name="lab_gobang_AI_2.c" stamp="1356072716169" updateReferences="true"/>
+</session>

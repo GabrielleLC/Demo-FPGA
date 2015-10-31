@@ -1,0 +1,30 @@
+#ifndef LAB_GOBANG_AI_2_H_
+#define LAB_GOBANG_AI_2_H_
+
+#define MAX_INFINITY       10000000
+#define MIN_INFINITY       -10000000
+#define MAX_DEPTH          2
+#define HUMAN_PLAYER       0
+#define COMPUTER_PLAYER    1
+#define EMPTY              2
+#define CURSOR             3
+#define DEAD               0
+#define LIVE               1
+#define TIME_LIMIT         30
+
+int board_state[15][15];
+int turn;
+int one_second_flag;
+int thirty_second_flag;
+int step_flag;
+int win_flag;
+int status;
+int maxMoveX, maxMoveY;
+volatile int time=0, count=0;
+volatile u32 ssBuf;
+static const u32 rgfsNumMap[10] = {0x000000C0, 0x000000F9, 0x000000A4,
+								0x000000B0, 0x00000099, 0x00000092,
+								0x00000082, 0x000000F8, 0x00000080,
+								0x00000090};
+
+#endif /* LAB_GOBANG_AI_2_H_ */

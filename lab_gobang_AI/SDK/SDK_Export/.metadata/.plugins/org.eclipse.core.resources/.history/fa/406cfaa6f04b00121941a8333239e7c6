@@ -1,0 +1,395 @@
+#include "xparameters.h"
+#include "vga_ip.h"
+#include "lab_gobang_AI_2.h"
+#include "VGADraw.h"
+
+extern board_state[15][15];
+
+void DrawBoard (void)
+{
+	int i,j,x_cor,y_cor,type,vga_input;
+	for (i=0; i<15; i++) {
+		for (j=0; j<15; j++) {
+			x_cor=i<<24;
+			y_cor=j<<16;
+			type=EMPTY;
+			vga_input=x_cor+y_cor+type;
+		    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+		}
+    }
+}
+
+void DrawChess (int x_pos, int y_pos, int turn)
+{
+	int x_cor,y_cor,type,vga_input;
+	type=turn;
+	x_cor=x_pos<<24;
+	y_cor=y_pos<<16;
+	vga_input=x_cor+y_cor+type;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+}
+
+void EraseCursor (int x_pos, int y_pos)
+{
+	if (board_state[x_pos][y_pos]==0) {
+		DrawChess(x_pos,y_pos,0);
+	}
+	else if (board_state[x_pos][y_pos]==1) {
+		DrawChess(x_pos,y_pos,1);
+	}
+	else {
+		DrawChess(x_pos,y_pos,2);
+	}
+}
+
+void DrawNumber(int number, int x_pos, int y_pos, int turn)
+{
+	int vga_input;
+
+	switch (number) {
+	    case 0: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                vga_input=(x_pos<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+       	        VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+       	        vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+       	        VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+       	        vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+                VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+       	        vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+       	        VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+       	        vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+       	        VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                break;
+	    case 1: vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+                break;
+	    case 2: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=(x_pos<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	    	    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	    	    break;
+	    case 3: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	    case 4: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	    case 5: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	    case 6: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	    case 7: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	    case 8: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	    case 9: vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	            VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+1)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	           	vga_input=((x_pos+2)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+	           	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	            break;
+	}
+
+}
+
+void DrawTime(int time, int turn)
+{
+	int num1, num2;
+
+	num1=time/10;
+	num2=time%10;
+	DrawNumber(num1, 2, 1, turn);
+	DrawNumber(num2, 6, 1, turn);
+}
+
+void DrawWinning(int x_pos, int y_pos, int turn)
+{
+	int vga_input;
+
+	vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	vga_input=(x_pos<<24)+((y_pos-1)<<16)+(1<<8)+turn;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	vga_input=((x_pos+1)<<24)+((y_pos-2)<<16)+(1<<8)+turn;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	vga_input=((x_pos+2)<<24)+((y_pos-1)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+
+    vga_input=((x_pos+5)<<24)+(y_pos<<16)+(1<<8)+turn;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	vga_input=((x_pos+5)<<24)+((y_pos-1)<<16)+(1<<8)+turn;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	vga_input=((x_pos+6)<<24)+((y_pos-2)<<16)+(1<<8)+turn;
+	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+	vga_input=((x_pos+7)<<24)+((y_pos-1)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+7)<<24)+(y_pos<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+
+    vga_input=((x_pos+2)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+3)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+4)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+5)<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+
+}
+
+void DrawStatus(int x_pos, int y_pos, int turn, int status)
+{
+	int vga_input;
+
+    vga_input=(x_pos<<24)+(y_pos<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+1)<<24)+(y_pos<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+2)<<24)+(y_pos<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=(x_pos<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+2)<<24)+((y_pos+1)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=(x_pos<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+1)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+2)<<24)+((y_pos+2)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=(x_pos<<24)+((y_pos+3)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=(x_pos<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+
+    vga_input=((x_pos+3)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+3)<<24)+((y_pos+5)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+4)<<24)+((y_pos+6)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+5)<<24)+((y_pos+5)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    vga_input=((x_pos+5)<<24)+((y_pos+4)<<16)+(1<<8)+turn;
+    VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+
+    if (status==0) {
+    	vga_input=((x_pos+7)<<24)+((y_pos+5)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+8)<<24)+((y_pos+5)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+9)<<24)+((y_pos+5)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+6)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+9)<<24)+((y_pos+6)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+7)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+8)<<24)+((y_pos+7)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+9)<<24)+((y_pos+7)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+8)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+9)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    }
+    else if(status==1) {
+    	vga_input=((x_pos+7)<<24)+((y_pos+6)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+8)<<24)+((y_pos+6)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+9)<<24)+((y_pos+6)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+7)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+8)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+7)<<24)+((y_pos+9)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+8)<<24)+((y_pos+9)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+    	vga_input=((x_pos+9)<<24)+((y_pos+9)<<16)+(1<<8)+turn;
+    	VGA_IP_mWriteReg(XPAR_VGA_IP_0_BASEADDR, 0, vga_input);
+
+    }
+}
+

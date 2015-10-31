@@ -1,0 +1,14 @@
+#Sun Nov 03 14:58:33 GMT+08:00 2013
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:Stack-size=1024
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.sbss=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.sbss2=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:Heap=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.data=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:Stack=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.sdata=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.text=ilmb_cntlr_dlmb_cntlr
+eclipse.preferences.version=1
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.sdata2=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:Heap-size=1024
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.bss=ilmb_cntlr_dlmb_cntlr
+com.xilinx.sdk.linkgen.prefs.lab_gobang_AI_2\:.rodata=ilmb_cntlr_dlmb_cntlr

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="C:\Users\MagoRox\Desktop\lab_gobang_AI\SDK\SDK_Export\hw\system_bd.bmm" key="lab_gobang_AI_2_hw_platform-bmmFile"/>
+	<item value="C:\Users\MagoRox\Desktop\lab_gobang_AI\SDK\SDK_Export\hw\system.bit" key="lab_gobang_AI_2_hw_platform-bitFile"/>
+	<item value="C:\Users\MagoRox\Desktop\lab_gobang_AI\SDK\SDK_Export\lab_gobang_AI_2\Debug\lab_gobang_AI_2.elf" key="lab_gobang_AI_2_hw_platform-microblaze_0-initElf"/>
+</section>

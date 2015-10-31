@@ -1,0 +1,10 @@
+ The following files will be modified:
+  system.mhs
+--------------------------------------
+ The following changes will be made:
+ Core microblaze 8.20.a will be replaced by 8.20.b
+ Core clock_generator 4.02.a will be replaced by 4.03.a
+--------------------------------------
+ You must manually make the following changes:
+ No core by the name of  mem_bus_mux was found.
+ Please check the mhs file and repository.
